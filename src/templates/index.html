@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+        }
+        .menu-bar {
+            background-image: linear-gradient(to right, #2196f3 0%, #21cbf3 100%);
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 0; /* Remove bottom margin */
+        }
+        .container {
+            display: flex;
+            justify-content: center; /* Center children horizontally */
+            align-items: center; /* Align children vertically */
+            padding: 10px;
+            flex-direction: column; /* Stack children vertically */
+        }
+        .section {
+            padding: 10px 20px; /* Reduced vertical padding */
+        }
+        .weather-info {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px; /* Reduced margin to tighten space */
+        }
+        .recommendation {
+            background-color: #f0f4c3;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px; /* Reduced margin to tighten space */
+            text-align: center;
+        }
+        .description {
+            margin: 5px auto; /* Reduced margin for description */
+            text-align: center;
+            font-size: 1.2em;
+        }
+        form {
+            width: 100%;
+            margin-top: 10px; /* Ensures form is closer to the header */
+        }
+        .input, .button {
+            margin-top: 5px; /* Tighten spacing around input and button */
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-bar">
+        <h1 class="title is-1">Weather Dashboard</h1>
+    </div>
+    <div class="section">
+        <p class="description">
+            Enter a city name to get the current weather and clothing recommendations based on the forecast.
+        </p>
+        <div class="container">
+            <form action="/" method="post" class="field has-addons has-addons-centered">
+                <div class="control">
+                    <input class="input" type="text" name="user_input" placeholder="Enter city name..." />
+                </div>
+                <div class="control">
+                    <button class="button is-info" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if user_input %}
+        <div class="section">
+            <div class="container">
+                <div class="weather-info">
+                    <h2 class="subtitle">{{ user_input }}</h2>
+                    <p>Temperature: {{ weather_data.temperature }} °F</p>
+                    <p>Weather: {{ weather_data.weather }} - {{ weather_data.description }}</p>
+                    <p>Humidity: {{ weather_data.humidity }}%</p>
+                    <p>Pressure: {{ weather_data.pressure }} hPa</p>
+                    <p>Wind Speed: {{ weather_data.wind_speed }} mph</p>
+                    <p>Sunrise: {{ weather_data.sunrise }} (local time)</p>
+                    <p>Sunset: {{ weather_data.sunset }} (local time)</p>
+                </div>
+            </div>
+            <div class="recommendation">
+                <p>Based on today's forecast - {{ recommendation }}</p>
+            </div>
+        </div>
+    {% endif %}
+    {% if error_message %}
+        <p>Error: {{ error_message }}</p>
+    {% endif %}
+</body>
+</html>
