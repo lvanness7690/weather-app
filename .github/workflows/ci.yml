@@ -10,12 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      sqlite:
-        image: nouchka/sqlite3
-        ports:
-          - 3306:3306
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python3 -m venv venv
+          python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
