@@ -17,13 +17,20 @@ jobs:
     - name: Create and activate virtual environment
       run: |
         python -m venv venv
-        . ./venv/bin/activate
+        echo "venv created"
+        pwd
+        ls -al
+        ls -al venv
+        . venv/bin/activate
         pip install -r requirements.txt
+      shell: bash
 
     - name: Run tests
       run: |
-        . ./venv/bin/activate
+        . venv/bin/activate
         python -m unittest discover -s tests
+      shell: bash
 
     - name: List files for debugging
       run: ls -R
+      shell: bash
