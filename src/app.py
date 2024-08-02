@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from src.models import db, WeatherData
 import requests
 import logging
 
@@ -6,6 +7,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///weather.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
 
 def get_clothing_recommendation(temp, description):
     recommendation = ""
@@ -48,6 +52,19 @@ def home():
                     'sunset': data['sys']['sunset']
                 }
                 recommendation = get_clothing_recommendation(data['main']['temp'], data['weather'][0]['description'])
+                new_weather_data = WeatherData(
+                    city=user_input,
+                    temperature=data['main']['temp'],
+                    weather=data['weather'][0]['main'],
+                    description=data['weather'][0]['description'],
+                    humidity=data['main']['humidity'],
+                    pressure=data['main']['pressure'],
+                    wind_speed=data['wind']['speed'],
+                    sunrise=data['sys']['sunrise'],
+                    sunset=data['sys']['sunset']
+                )
+                db.session.add(new_weather_data)
+                db.session.commit()
         except Exception as e:
             error_message = str(e)
             logging.error(f"Error fetching data: {str(e)}")
