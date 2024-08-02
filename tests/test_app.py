@@ -1,5 +1,7 @@
-# tests/test_app.py
 import unittest
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from app import app
 from unittest.mock import patch
 
@@ -15,8 +17,8 @@ class TestWeatherApp(unittest.TestCase):
     @patch('requests.get')
     def test_api_integration(self, mock_get):
         mock_data = {
-            "main": {"temp": 75, "humidity": 65},
-            "weather": [{"main": "Clear", "description": "clear sky"}],
+            "main": {"temp": 75, "humidity": 65, "pressure": 1013},
+            "weather": [{"main": "Rain", "description": "light rain"}],
             "wind": {"speed": 5},
             "sys": {"sunrise": 1588337844, "sunset": 1588387000},
             "coord": {"lat": 40.7128, "lon": -74.0060},
@@ -27,6 +29,8 @@ class TestWeatherApp(unittest.TestCase):
 
         response = self.client.post('/', data={'user_input': 'New York'})
         self.assertIn('75', response.data.decode())  # Check if temperature is in the response
+        self.assertIn('light rain', response.data.decode())  # Check if description is in the response
+        self.assertIn('Bring an umbrella.', response.data.decode())  # Check if recommendation is in the response
 
     def tearDown(self):
         pass
